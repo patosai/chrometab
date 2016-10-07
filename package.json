@@ -1,0 +1,30 @@
+{
+  "name": "chrometab",
+  "version": "1.0.0",
+  "description": "Patosai's Chrome new tab replacement",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node go.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patosai/chrometab.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patosai/chrometab/issues"
+  },
+  "homepage": "https://github.com/patosai/chrometab#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "moment": "^2.15.1",
+    "node-sass": "^3.10.1",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  }
+}

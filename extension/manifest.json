@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "Chrometab",
+  "description": "Patosai's Chrome New Tab replacement",
+  "version": "1.0",
+
+  "icons": {
+    "16": "icon/16.png",
+    "48": "icon/48.png",
+    "128": "icon/128.png"
+  },
+
+  "chrome_url_overrides" : {
+    "newtab": "newtab.html"
+  },
+
+  "permissions": [
+    "storage"
+  ],
+
+  "web_accessible_resources": [
+    "js/*.js",
+    "js/vendor/*.js"
+  ]
+}
