@@ -75,13 +75,18 @@ $text-color: #FFF;
       font-size: 0.9em;
       border-collapse: collapse;
 
+      td {
+        padding: 1em;
+      }
+
       .time {
         font-size: 1.2em;
         border-bottom: 2px solid #FFF;
       }
 
       .icon {
-        float: left;
+        display: block;
+        margin: 0 auto;
       }
     }
   }

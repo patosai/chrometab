@@ -4,7 +4,7 @@ var moment = require('moment');
 var NewsArticle = require('./news-article');
 
 var Util = require('./util');
-var secrets = require('./secrets.json');
+var secrets = require('./json/secrets.json');
 
 var News = React.createClass({
   getInitialState() {

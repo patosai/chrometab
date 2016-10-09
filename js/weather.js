@@ -2,7 +2,7 @@ var React = require('react');
 var moment = require('moment');
 
 var Util = require('./util');
-var secrets = require('./secrets.json');
+var secrets = require('./json/secrets.json');
 
 var Weather = React.createClass({
   getInitialState() {
@@ -76,9 +76,9 @@ var Weather = React.createClass({
                     <div className='time'>
                       {moment.unix(data.dt).format("H:MM")}
                     </div>
+                    <img className='icon' src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`} />
                     <div className='temp'>
-                      <img className='icon' src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`} />
-                      {`${(data.main.temp - 273).toFixed(1)}C`}
+                      {`${(data.main.temp - 273).toFixed(1)}°C`}
                     </div>
                     <div className='humidity'>
                       {`${data.main.humidity}%`}
