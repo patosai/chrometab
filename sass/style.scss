@@ -22,8 +22,8 @@ $text-color: #FFF;
 
   .left-col,
   .right-col {
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    padding-left: 2.5em;
+    padding-right: 2.5em;
   }
 
   .col {
@@ -96,7 +96,6 @@ $text-color: #FFF;
     }
 
     .news-article {
-      width: 75%;
       margin: 2.5em auto;
       vertical-align: top;
 
