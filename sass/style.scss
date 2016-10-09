@@ -1,3 +1,5 @@
+$text-color: #FFF;
+
 @font-face {
   font-family: Hack;
   src: url(./../font/Hack-Regular.ttf);
@@ -10,7 +12,7 @@
 
 #app-root {
   font-family: Hack, sans-serif;
-  color: #FFF;
+  color: $text-color;
   background-color: #313131;
 
   display: flex;
@@ -60,7 +62,28 @@
   }
 
   .weather {
-    height: 5em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-size: 1.2em;
+    }
+
+    table {
+      color: $text-color;
+      font-size: 0.9em;
+      border-collapse: collapse;
+
+      .time {
+        font-size: 1.2em;
+        border-bottom: 2px solid #FFF;
+      }
+
+      .icon {
+        float: left;
+      }
+    }
   }
 
   .news {
