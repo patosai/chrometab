@@ -8,10 +8,11 @@ var Weather = React.createClass({
   getInitialState() {
     return {
       weatherData: {
-        city: {
-          name: "New York"
-        },
-        list: []
+        forecast: {
+          simpleforecast: {
+            forecastday: []
+          }
+        }
       }
     }
   },
@@ -26,9 +27,8 @@ var Weather = React.createClass({
         Util.log('Using cached weather data');
         this.setState({weatherData: weatherData.weather});
       } else {
-        var apiKey = secrets.openweathermap_api_key;
-        var cityId = "4984247"; // Ann Arbor
-        var url = `http://api.openweathermap.org/data/2.5/forecast?id=${cityId}&appid=${apiKey}`;
+        var apiKey = secrets.wunderground_api_key;
+        var url = `http://api.wunderground.com/api/${apiKey}/forecast/q/MI/Ann_Arbor.json`;
         Util.log('Getting weather from API');
         Util.getJson(url, (data) => {
           var storedObj = {
@@ -51,40 +51,32 @@ var Weather = React.createClass({
   },
 
   render() {
-    var maxTimeForecasted = moment().unix() + (60 * 60 * 24); // 24 hour forecast
-    var forecastData = [];
-    for (var ii = 0; ii < this.state.weatherData.list.length; ++ii) {
-      var data = this.state.weatherData.list[ii];
-      if (data.dt < maxTimeForecasted) {
-        forecastData.push(data);
-      } else {
-        break;
-      }
-    }
+    var forecastData = this.state.weatherData.forecast.simpleforecast.forecastday;
 
     return (
       <div className='weather center-children'>
         <div className='title'>
-          {`Forecast for ${this.state.weatherData.city.name}, ${this.state.weatherData.city.country}`}
+          Forecast
         </div>
         <table className='forecast'>
           <tbody>
             <tr>
               {forecastData.map((data, idx) => {
+                var momentTime = moment.unix(parseInt(data.date.epoch));
                 return (
                   <td key={idx}>
                     <div className='time'>
-                      {moment.unix(data.dt).format("H:MM")}
+                      {momentTime.format("ddd")}
                     </div>
-                    <img className='icon' src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`} />
+                    <img className='icon' src={`weather-svg/${data.icon}.svg`} />
                     <div className='temp'>
-                      {`${(data.main.temp - 273).toFixed(1)}°C`}
+                      H {data.high.celsius}°C, L {data.low.celsius}°C
                     </div>
                     <div className='humidity'>
-                      {`${data.main.humidity}%`}
+                      {data.avehumidity}%
                     </div>
                     <div className='wind'>
-                      {`${data.wind.speed}m/s`}
+                      {data.avewind.mph}mph
                     </div>
                   </td>
                 );

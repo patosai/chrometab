@@ -25,7 +25,7 @@ var TimeAndDate = React.createClass({
     return (
       <div className='time-and-date'>
         <div className='time'>{this.state.timeobj.format("h:mm:ssa")}</div>
-        <div className='date'>{this.state.timeobj.format("MMMM D, YYYY")}</div>
+        <div className='date'>{this.state.timeobj.format("dddd MMMM D, YYYY")}</div>
       </div>
     );
   }
