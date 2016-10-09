@@ -55,9 +55,6 @@ var Weather = React.createClass({
 
     return (
       <div className='weather center-children'>
-        <div className='title'>
-          Forecast
-        </div>
         <table className='forecast'>
           <tbody>
             <tr>
