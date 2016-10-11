@@ -4,8 +4,8 @@
   "description": "Patosai's Chrome new tab replacement",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node go.js"
+    "test": "mocha js/cache-object.test.js",
+    "start": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -22,9 +22,13 @@
     "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.1.1",
     "moment": "^2.15.1",
     "node-sass": "^3.10.1",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "sinon": "^1.17.6",
+    "sinon-chrome": "^2.0.3"
   }
 }
