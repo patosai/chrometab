@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+console.log("Building bundle");
 var fs = require("fs");
 var browserify = require("browserify");
 browserify("./js/app.js")
@@ -5,6 +8,7 @@ browserify("./js/app.js")
   .bundle()
   .pipe(fs.createWriteStream("extension/js/bundle.js"));
 
+console.log("Building CSS");
 var sass = require('node-sass');
 sass.render({
   file: "sass/style.scss",
