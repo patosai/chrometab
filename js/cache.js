@@ -132,8 +132,6 @@ function getData(key, callback) {
 
   var dataIsOld = Moment().unix() >= dataAge + maxAgeSeconds;
   var noData = !cacheObject.getData();
-console.log(cacheObject);
-console.log(cacheObject.getData());
   if (dataIsOld || noData) {
     Util.log("Getting new data for " + key);
     // fetch new data

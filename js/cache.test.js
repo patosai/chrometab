@@ -9,6 +9,10 @@ var Cache = require('./cache');
 var Util = require('./util');
 
 describe('Cache', () => {
+  before(() => {
+    sinon.stub(Util, "log");
+  });
+
   it('saves new cache objects when asked to', () => {
     Cache.createCache('testname', 'http://testapi.com/foo');
     assert.equal(Cache.getApiUrl('testname'), 'http://testapi.com/foo');
