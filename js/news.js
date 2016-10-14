@@ -7,6 +7,9 @@ var NewsArticle = require('./news-article');
 var Util = require('./util');
 var secrets = require('./json/secrets.json');
 
+const CACHE_KEY = 'news_sources';
+const API_URL = `https://newsapi.org/v1/sources?language=en&country=us`;
+
 var News = React.createClass({
   getInitialState() {
     return {
@@ -20,11 +23,16 @@ var News = React.createClass({
         (this.state.articles !== nextState.articles);
   },
 
+  componentDidMount() {
+    Cache.initialize(() => {
+      Cache.createCacheIfNeeded(CACHE_KEY, API_URL);
+      Cache.setMaxAge(CACHE_KEY, 60 * 60 * 24 * 4);
+      this._getNews();
+    });
+  },
+
   _getNews() {
-    var apiUrl = `https://newsapi.org/v1/sources?language=en&country=us`;
-    Cache.createCacheIfNeeded('news_sources', apiUrl);
-    Cache.setMaxAge('news_sources', 60 * 60 * 24 * 4);
-    Cache.getData('news_sources', (data) => {
+    Cache.getData(CACHE_KEY, (data) => {
       var sources = data.sources;
       var index = Math.floor(Math.random() * sources.length);
       var source = sources[index];
@@ -51,10 +59,6 @@ var News = React.createClass({
         articles: data.articles
       });
     });
-  },
-
-  componentDidMount() {
-    this._getNews();
   },
 
   render() {

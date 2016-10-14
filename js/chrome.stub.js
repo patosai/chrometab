@@ -18,6 +18,14 @@ module.exports = {
         }
         callback();
       },
+
+      clear() {
+        chromeStorage = {};
+      },
+
+      getAll() {
+        return chromeStorage;
+      }
     }
   }
 }

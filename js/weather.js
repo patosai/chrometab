@@ -1,8 +1,12 @@
 var React = require('react');
 var Moment = require('moment');
 
+var Cache = require('./cache');
 var Util = require('./util');
 var secrets = require('./json/secrets.json');
+
+const CACHE_KEY = 'current_weather';
+const API_URL = `http://api.wunderground.com/api/${secrets.wunderground_api_key}/forecast/q/MI/Ann_Arbor.json`;
 
 var Weather = React.createClass({
   getInitialState() {
@@ -17,32 +21,17 @@ var Weather = React.createClass({
         (this.state.hourlyPopupShowing !== nextState.hourlyPopupShowing);
   },
 
+  componentDidMount() {
+    Cache.initialize(() => {
+      Cache.createCacheIfNeeded(CACHE_KEY, API_URL);
+      Cache.setMaxAge(CACHE_KEY, 60 * 60 * 4);
+      this._getWeather();
+    });
+  },
+
   _getWeather() {
-    chrome.storage.local.get('current_weather', (storedObj) => {
-      var weatherData = storedObj.current_weather;
-      var unixTime = Moment().unix();
-      var maxAge = unixTime - (60 * 60 * 4); // 4 hours
-
-      if (weatherData && weatherData.timestamp && weatherData.timestamp > maxAge) {
-        Util.log('Using cached weather data');
-        this.setState({weatherData: weatherData.weather});
-      } else {
-        var apiKey = secrets.wunderground_api_key;
-        var url = `http://api.wunderground.com/api/${apiKey}/forecast/q/MI/Ann_Arbor.json`;
-        Util.log('Getting weather from API');
-        Util.getJson(url, (data) => {
-          var storedObj = {
-            timestamp: unixTime,
-            weather: data
-          };
-
-          chrome.storage.local.set({'current_weather': storedObj}, () => {
-            //Notify that we saved.
-            Util.log('Cached current weather data');
-            this.setState({weatherData: data});
-          });
-        });
-      }
+    Cache.getData(CACHE_KEY, (data) => {
+      this.setState({weatherData: data});
     });
   },
 
@@ -52,10 +41,6 @@ var Weather = React.createClass({
 
   _hideHourlyForecastPopup() {
     this.setState({hourlyPopupShowing: false});
-  },
-
-  componentDidMount() {
-    this._getWeather();
   },
 
   render() {

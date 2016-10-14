@@ -1,3 +1,7 @@
+// Cache library
+// call 'initialize' function to initialize
+// library auto-initializes as well to minimize time delay
+
 var Moment = require('moment');
 
 var CacheObject = require('./cache-object');
@@ -11,9 +15,29 @@ var cacheLoaded = false;
 var cacheLoading = false;
 var cacheLoadCallbacks = [];
 
+initialize();
+
 /*
  * Chrome storage save/load
  */
+
+function initialize(callback) {
+  if (callback) {
+    Util.assert(Util.isFunction(callback));
+  }
+
+  if (cacheLoaded) {
+    if (callback) {
+      callback();
+    }
+  } else if (cacheLoading) {
+    if (callback) {
+      addCacheLoadCallback(callback);
+    }
+  } else {
+    loadStorageData(callback);
+  }
+}
 
 function loadStorageData(callback) {
   if (callback) {
@@ -21,10 +45,7 @@ function loadStorageData(callback) {
     addCacheLoadCallback(callback);
   }
 
-  if (cacheLoading) {
-    return;
-  }
-
+  cacheLoaded = false;
   cacheLoading = true;
 
   chrome.storage.local.get(CHROME_STORAGE_KEY, (storageObj) => {
@@ -53,6 +74,7 @@ function loadStorageData(callback) {
 }
 
 function saveStorageData(callback) {
+  Util.assert(cacheLoaded);
   if (callback) {
     Util.assert(Util.isFunction(callback));
   }
@@ -87,8 +109,10 @@ function addCacheLoadCallback(fxn) {
  */
 
 function createCache(name, apiUrl) {
+  Util.assert(cacheLoaded);
   Util.assert(Util.isString(name));
   Util.assert(Util.isString(apiUrl));
+
   var cacheObject = new CacheObject({apiUrl: apiUrl});
   cache[name] = cacheObject;
 
@@ -96,7 +120,9 @@ function createCache(name, apiUrl) {
 }
 
 function createCacheIfNeeded(name, apiUrl) {
+  Util.assert(cacheLoaded);
   if (!Util.isCacheObject(cache[name])) {
+    Util.log("Creating cache " + name);
     createCache(name, apiUrl);
   }
 }
@@ -106,31 +132,19 @@ function createCacheIfNeeded(name, apiUrl) {
  */
 
 function getData(key, callback) {
+  Util.assert(cacheLoaded);
   Util.assert(Util.isString(key));
   Util.assert(Util.isFunction(callback));
-
-  if (!cacheLoaded) {
-    loadStorageData(() => {
-      getData(key, callback);
-    });
-    return;
-  } else if (cacheLoading) {
-    addCacheLoadCallback(() => {
-      getData(key, callback);
-    });
-    return;
-  }
 
   var cacheObject = cache[key];
   if (!Util.isCacheObject(cacheObject)) {
     callback(null);
     return;
   }
-
-  var dataAge = getTimestamp(key);
+  var timestamp = getTimestamp(key);
   var maxAgeSeconds = getMaxAge(key);
 
-  var dataIsOld = Moment().unix() >= dataAge + maxAgeSeconds;
+  var dataIsOld = Moment().unix() >= timestamp + maxAgeSeconds;
   var noData = !cacheObject.getData();
   if (dataIsOld || noData) {
     Util.log("Getting new data for " + key);
@@ -147,6 +161,7 @@ function getData(key, callback) {
 }
 
 function setData(key, data, callback) {
+  Util.assert(cacheLoaded);
   Util.assert(Util.isString(key));
   if (callback) {
     Util.assert(Util.isFunction(callback));
@@ -169,6 +184,7 @@ function setData(key, data, callback) {
  */
 
 function getMetadata(key, metadataKey) {
+  Util.assert(cacheLoaded);
   Util.assert(Util.isString(key));
   Util.assert(Util.isString(metadataKey));
 
@@ -178,6 +194,7 @@ function getMetadata(key, metadataKey) {
 }
 
 function setMetadata(key, metadataKey, metadataData) {
+  Util.assert(cacheLoaded);
   Util.assert(Util.isString(key));
   Util.assert(Util.isString(metadataKey));
 
@@ -222,6 +239,8 @@ function setTimestamp(key, timestamp) {
  */
 
 module.exports = {
+  initialize: initialize,
+
   createCache: createCache,
 
   createCacheIfNeeded: createCacheIfNeeded,

@@ -13,6 +13,10 @@ describe('Cache', () => {
     sinon.stub(Util, "log");
   });
 
+  beforeEach(() => {
+    chrome.storage.local.clear();
+  });
+
   it('saves new cache objects when asked to', () => {
     Cache.createCache('testname', 'http://testapi.com/foo');
     assert.equal(Cache.getApiUrl('testname'), 'http://testapi.com/foo');
@@ -227,6 +231,25 @@ describe('Cache', () => {
         stub.restore();
         done();
       });
+    });
+  });
+
+  it('saves items to chrome local storage', (done) => {
+    assert.equal(Object.keys(chrome.storage.local.getAll()).length, 0);
+
+    Cache.createCache('testname', 'http://testapi.com/foo');
+
+    var stubData = {
+      'data': 'bar'
+    };
+
+    var stub = sinon.stub(Util, 'getJson', (url, callback) => {
+      callback(stubData);
+    });
+
+    Cache.getData('testname', (data) => {
+      assert.equal(Object.keys(chrome.storage.local.getAll()).length, 1);
+      done();
     });
   });
 });
