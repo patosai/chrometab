@@ -1,4 +1,5 @@
 # Chrometab
+[![Build Status](https://travis-ci.org/patosai/chrometab.svg?branch=dev)](https://travis-ci.org/patosai/chrometab)
 
 A new tab replacement, for the Chrome browser.
 
