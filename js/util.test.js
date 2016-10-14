@@ -1,0 +1,76 @@
+var chai = require('chai');
+var assert = chai.assert;
+var expect = chai.expect;
+
+var CacheObject = require('./cache-object');
+var Util = require('./util');
+
+describe('Util', () => {
+  it('should not throw an error when assertion passes', () => {
+    var fn = () => {
+      Util.assert(true);
+    };
+    expect(fn).to.not.throw(Error);
+  });
+
+  it('should throw an error when assertion passes', () => {
+    var fn = () => {
+      Util.assert(false);
+    };
+    expect(fn).to.throw(Error);
+  });
+
+  it('should have error message when given to assertion', () => {
+    var fn = () => {
+      Util.assert(false, "really bad error f00bar");
+    };
+    expect(fn).to.throw(Error, "really bad error f00bar");
+  });
+
+  it('should check if is string', () => {
+    var badStuff = [null, undefined, 42, () => {}, {}, [], new CacheObject()];
+
+    assert.ok(Util.isString('foo'));
+    for (var idx in badStuff) {
+      assert.notOk(Util.isString(badStuff[idx]));
+    }
+  });
+
+  it('should check if is object', () => {
+    var badStuff = [null, undefined, 'foo', 42, () => {}, []];
+
+    assert.ok(Util.isObject({}));
+    for (var idx in badStuff) {
+      assert.notOk(Util.isObject(badStuff[idx]));
+    }
+  });
+
+  it('should check if is function', () => {
+    var badStuff = [null, undefined, 'foo', 42, [], new CacheObject()];
+
+    assert.ok(Util.isFunction(() => {}));
+    for (var idx in badStuff) {
+      assert.notOk(Util.isFunction(badStuff[idx]));
+    }
+  });
+
+  it('should check if is integer', () => {
+    var badStuff = [null, undefined, 'foo', () => {}, [], new CacheObject()];
+
+    assert.ok(Util.isInt(42));
+    assert.ok(Util.isInt(-1));
+    assert.ok(Util.isInt(0));
+    for (var idx in badStuff) {
+      assert.notOk(Util.isInt(badStuff[idx]));
+    }
+  });
+
+  it('should check if is cache object', () => {
+    var badStuff = [{}, null, undefined, 'foo', 42, () => {}];
+
+    assert.ok(Util.isCacheObject(new CacheObject()));
+    for (var idx in badStuff) {
+      assert.notOk(Util.isCacheObject(badStuff[idx]));
+    }
+  });
+});

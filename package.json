@@ -4,7 +4,7 @@
   "description": "Patosai's Chrome new tab replacement",
   "main": "index.js",
   "scripts": {
-    "test": "mocha js/cache-object.test.js",
+    "test": "mocha js/*.test.js",
     "start": "node build.js"
   },
   "repository": {
@@ -28,7 +28,6 @@
     "node-sass": "^3.10.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "sinon": "^1.17.6",
-    "sinon-chrome": "^2.0.3"
+    "sinon": "^1.17.6"
   }
 }

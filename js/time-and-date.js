@@ -1,16 +1,16 @@
 var React = require('react');
-var moment = require('moment');
+var Moment = require('moment');
 
 var TimeAndDate = React.createClass({
   getInitialState() {
     return {
-      timeobj: moment(),
+      timeobj: Moment(),
       interval: null
     }
   },
 
   tick() {
-    this.setState({timeobj: moment()});
+    this.setState({timeobj: Moment()});
   },
 
   componentDidMount() {

@@ -1,6 +1,7 @@
 var React = require('react');
-var moment = require('moment');
+var Moment = require('moment');
 
+var Cache = require('./cache');
 var NewsArticle = require('./news-article');
 
 var Util = require('./util');
@@ -14,39 +15,25 @@ var News = React.createClass({
     }
   },
 
-  _getNews() {
-    chrome.storage.local.get('news_sources', (storedObj) => {
-      var sourcesData = storedObj.news_sources;
-      var unixTime = moment().unix();
-      var maxAge = unixTime - (60 * 60 * 24 * 7); // 7 days
+  shouldComponentUpdate(nextProps, nextState) {
+    return (this.state.source !== nextState.source) ||
+        (this.state.articles !== nextState.articles);
+  },
 
-      if (sourcesData && sourcesData.timestamp && sourcesData.timestamp > maxAge) {
-        var sources = sourcesData.sources;
-        var index = Math.floor(Math.random() * sources.length);
-        var source = sources[index];
-        var filteredSource = {
-          id: source.id,
-          name: source.name,
-          logoUrl: source.urlsToLogos.medium
-        };
-        this._getNewsFromSource(filteredSource);
-      } else {
-        var apiUrl = `https://newsapi.org/v1/sources?language=en&country=us`;
-        Util.log("Getting new news sources");
-        Util.getJson(apiUrl, (data) => {
-          if (data.status != "ok") {
-            Util.error("Failed to get new news sources - response not ok");
-          } else {
-            var storedObj = {
-              timestamp: unixTime,
-              sources: data.sources
-            };
-            chrome.storage.local.set({'news_sources': storedObj}, () => {
-              Util.log("Saved new news sources");
-            });
-          }
-        });
-      }
+  _getNews() {
+    var apiUrl = `https://newsapi.org/v1/sources?language=en&country=us`;
+    Cache.createCacheIfNeeded('news_sources', apiUrl);
+    Cache.setMaxAge('news_sources', 60 * 60 * 24 * 4);
+    Cache.getData('news_sources', (data) => {
+      var sources = data.sources;
+      var index = Math.floor(Math.random() * sources.length);
+      var source = sources[index];
+      var filteredSource = {
+        id: source.id,
+        name: source.name,
+        logoUrl: source.urlsToLogos.medium
+      };
+      this._getNewsFromSource(filteredSource);
     });
   },
 
