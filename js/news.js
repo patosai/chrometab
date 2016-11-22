@@ -13,16 +13,13 @@ const API_URL = 'https://newsapi.org/v1/sources?language=en&country=us';
 var News = React.createClass({
   getInitialState() {
     return {
-      loaded: false,
       source: {name: ""},
       articles: []
     }
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (this.state.loaded !== nextState.loaded) ||
-        (this.state.source !== nextState.source) ||
-        (this.state.articles !== nextState.articles);
+    return (this.state.source.name !== nextState.source.name);
   },
 
   componentDidMount() {
@@ -34,6 +31,8 @@ var News = React.createClass({
   },
 
   _getNews() {
+    this.setState(this.getInitialState());
+
     Cache.getData(CACHE_KEY, (data) => {
       var sources = data.sources;
       var index = Math.floor(Math.random() * sources.length);
@@ -60,7 +59,6 @@ var News = React.createClass({
     Util.log(`Getting news from ${source.id}`);
     Cache.getData(sourceId, (data) => {
       this.setState({
-        loaded: true,
         source: source,
         articles: data.articles
       });
@@ -74,7 +72,7 @@ var News = React.createClass({
           <img src='svg/refresh.svg'/>
         </button>
         <div className='source'>
-          {this.state.loaded
+          {this.state.source.name
             ? (this.state.source.name || this.state.source.id)
             : 'Loading'
           }
