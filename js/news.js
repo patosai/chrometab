@@ -13,13 +13,15 @@ const API_URL = 'https://newsapi.org/v1/sources?language=en&country=us';
 var News = React.createClass({
   getInitialState() {
     return {
+      loaded: false,
       source: {name: ""},
       articles: []
     }
   },
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (this.state.source !== nextState.source) ||
+    return (this.state.loaded !== nextState.loaded) ||
+        (this.state.source !== nextState.source) ||
         (this.state.articles !== nextState.articles);
   },
 
@@ -50,11 +52,15 @@ var News = React.createClass({
       Util.error("No source provided to `getNewsFromSource`");
       return;
     }
-    Util.log(`Getting news from ${source.id}`);
+    var sourceId = 'newsapi-source-' + source.id;
     var apiKey = secrets.newsapi_api_key;
     var apiUrl = `https://newsapi.org/v1/articles?source=${source.id}&apiKey=${apiKey}`;
-    Util.getJson(apiUrl, (data) => {
+    Cache.createCacheIfNeeded(sourceId, apiUrl);
+    Cache.setMaxAge(sourceId, 60 * 60); // 1 hour
+    Util.log(`Getting news from ${source.id}`);
+    Cache.getData(sourceId, (data) => {
       this.setState({
+        loaded: true,
         source: source,
         articles: data.articles
       });
@@ -67,7 +73,12 @@ var News = React.createClass({
         <button className='refresh' onClick={this._getNews}>
           <img src='svg/refresh.svg'/>
         </button>
-        <div className='source'>{`From ${this.state.source.name || this.state.source.id}`}</div>
+        <div className='source'>
+          {this.state.loaded
+            ? (this.state.source.name || this.state.source.id)
+            : 'Loading'
+          }
+        </div>
         {this.state.articles.map((article, idx) => {
           return <NewsArticle key={idx}
               title={article.title}
