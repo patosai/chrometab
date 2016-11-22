@@ -8,7 +8,7 @@ var Util = require('./util');
 var secrets = require('./json/secrets.json');
 
 const CACHE_KEY = 'news_sources';
-const API_URL = `https://newsapi.org/v1/sources?language=en&country=us`;
+const API_URL = 'https://newsapi.org/v1/sources?language=en&country=us';
 
 var News = React.createClass({
   getInitialState() {
@@ -64,6 +64,9 @@ var News = React.createClass({
   render() {
     return (
       <div className='news'>
+        <button className='refresh' onClick={this._getNews}>
+          <img src='svg/refresh.svg'/>
+        </button>
         <div className='source'>{`From ${this.state.source.name || this.state.source.id}`}</div>
         {this.state.articles.map((article, idx) => {
           return <NewsArticle key={idx}

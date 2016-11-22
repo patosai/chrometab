@@ -90,6 +90,33 @@ $text-color: #FFF;
   .news {
     overflow: auto;
 
+    button.refresh {
+      position: fixed;
+      top: 0;
+      right: 0;
+
+      border: none;
+      padding: 10px 15px;
+      background: #EDA41C;
+
+      &:hover {
+        background: #D6951C;
+      }
+
+      &:active {
+        box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.6);
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      img {
+        width: 30px;
+        max-height: auto;
+      }
+    }
+
     .source {
       margin-top: 2em;
       text-align: center;
