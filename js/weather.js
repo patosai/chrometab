@@ -63,9 +63,7 @@ var Weather = React.createClass({
 
     return (
       <div className='weather center-children'>
-        <table className='forecast'
-            onMouseEnter={() => this._renderHourlyForecastPopup()}
-            onMouseLeave={this._hideHourlyForecastPopup}>
+        <table className='forecast'>
           <tbody>
             <tr>
               {forecastData.map((data, idx) => {
@@ -100,6 +98,9 @@ var Weather = React.createClass({
                   var momentTime = Moment.unix(parseInt(data.FCTTIME.epoch));
                   return (
                     <td key={idx}>
+                      <div className='date'>
+                        {(idx === 0 || momentTime.hour() === 0) ? momentTime.format("M/D") : ""}
+                      </div>
                       <div className='time'>
                         {momentTime.format("ha")}
                       </div>

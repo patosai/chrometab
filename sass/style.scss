@@ -83,6 +83,8 @@ $col-padding: 2.5em;
       .icon {
         display: block;
         margin: 0 auto;
+        height: 5em;
+        width: 5em;
       }
     }
 
@@ -97,6 +99,16 @@ $col-padding: 2.5em;
       overflow: auto;
 
       display: none;
+
+      .hourly-forecast {
+        td {
+          vertical-align: top;
+        }
+
+        .date {
+          height: 1em;
+        }
+      }
     }
 
     .forecast:hover + #hourly-forecast-popup,
