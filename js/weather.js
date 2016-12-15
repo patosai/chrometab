@@ -8,17 +8,20 @@ var secrets = require('./json/secrets.json');
 const CACHE_KEY = 'current_weather';
 const API_URL = `http://api.wunderground.com/api/${secrets.wunderground_api_key}/forecast/q/MI/Ann_Arbor.json`;
 
+const CACHE_KEY_HOURLY = CACHE_KEY + 'hourly';
+const API_URL_HOURLY = `http://api.wunderground.com/api/${secrets.wunderground_api_key}/hourly/q/MI/Ann_Arbor.json`;
+
 var Weather = React.createClass({
   getInitialState() {
     return {
       weatherData: null,
-      hourlyPopupShowing: false
+      hourlyWeatherData: null
     }
   },
 
   shouldComponentUpdate(nextProps, nextState) {
     return (this.state.weatherData !== nextState.weatherData) ||
-        (this.state.hourlyPopupShowing !== nextState.hourlyPopupShowing);
+        (this.state.hourlyWeatherData !== nextState.hourlyWeatherData);
   },
 
   componentDidMount() {
@@ -26,6 +29,10 @@ var Weather = React.createClass({
       Cache.createCacheIfNeeded(CACHE_KEY, API_URL);
       Cache.setMaxAge(CACHE_KEY, 60 * 60 * 4);
       this._getWeather();
+
+      Cache.createCacheIfNeeded(CACHE_KEY_HOURLY, API_URL_HOURLY);
+      Cache.setMaxAge(CACHE_KEY_HOURLY, 60 * 15);
+      this._getHourlyWeather();
     });
   },
 
@@ -35,34 +42,36 @@ var Weather = React.createClass({
     });
   },
 
-  _renderHourlyForecastPopup(momentTime) {
-    this.setState({hourlyPopupShowing: true});
-  },
-
-  _hideHourlyForecastPopup() {
-    this.setState({hourlyPopupShowing: false});
+  _getHourlyWeather() {
+    Cache.getData(CACHE_KEY_HOURLY, (data) => {
+      this.setState({hourlyWeatherData: data});
+    });
   },
 
   render() {
     var forecastData = [];
+    var hourlyForecastData = [];
 
     if (this.state.weatherData) {
       forecastData = this.state.weatherData.forecast.simpleforecast.forecastday;
-    } else {
-      return null;
+    }
+
+    if (this.state.hourlyWeatherData) {
+      console.log(this.state.hourlyWeatherData);
+      hourlyForecastData = this.state.hourlyWeatherData.hourly_forecast;
     }
 
     return (
       <div className='weather center-children'>
-        <table className='forecast'>
+        <table className='forecast'
+            onMouseEnter={() => this._renderHourlyForecastPopup()}
+            onMouseLeave={this._hideHourlyForecastPopup}>
           <tbody>
             <tr>
               {forecastData.map((data, idx) => {
                 var momentTime = Moment.unix(parseInt(data.date.epoch));
                 return (
-                  <td key={idx}
-                      onMouseEnter={() => this._renderHourlyForecastPopup(momentTime)}
-                      onMouseLeave={this._hideHourlyForecastPopup}>
+                  <td key={idx}>
                     <div className='time'>
                       {momentTime.format("ddd")}
                     </div>
@@ -82,9 +91,29 @@ var Weather = React.createClass({
             </tr>
           </tbody>
         </table>
-        {this.state.hourlyPopupShowing && <div id='hourly-forecast-popup'>
-          Hello!
-        </div>}
+
+        <div id='hourly-forecast-popup'>
+          <table className='hourly-forecast'>
+            <tbody>
+              <tr>
+                {hourlyForecastData.map((data, idx) => {
+                  var momentTime = Moment.unix(parseInt(data.FCTTIME.epoch));
+                  return (
+                    <td key={idx}>
+                      <div className='time'>
+                        {momentTime.format("ha")}
+                      </div>
+                      <img className='icon' src={`weather-svg/${data.icon}.svg`} />
+                      <div className='temp'>
+                        {data.temp.metric}°C
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }
