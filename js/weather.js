@@ -6,10 +6,10 @@ var Util = require('./util');
 var secrets = require('./json/secrets.json');
 
 const CACHE_KEY = 'current_weather';
-const API_URL = `http://api.wunderground.com/api/${secrets.wunderground_api_key}/forecast/q/MI/Ann_Arbor.json`;
+const API_URL = `http://api.wunderground.com/api/${secrets.wunderground_api_key}/forecast/q/NY/New_York.json`;
 
 const CACHE_KEY_HOURLY = CACHE_KEY + 'hourly';
-const API_URL_HOURLY = `http://api.wunderground.com/api/${secrets.wunderground_api_key}/hourly/q/MI/Ann_Arbor.json`;
+const API_URL_HOURLY = `http://api.wunderground.com/api/${secrets.wunderground_api_key}/hourly/q/NY/New_York.json`;
 
 var Weather = React.createClass({
   getInitialState() {
