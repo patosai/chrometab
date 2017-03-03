@@ -31,7 +31,7 @@ var TimeAndDate = React.createClass({
         <div className='time'>{this.state.timeobj.format("h:mm:ss")}</div>
         <div className='noon'>{this.state.timeobj.format("a")}</div>
         <div className='day-of-week'>{this.state.timeobj.format("dddd")}</div>
-        <div className='date'>{this.state.timeobj.format("MMMM D, YYYY")}</div>
+        <div className='date'>{this.state.timeobj.format("YYYY年M月D日")}</div>
       </div>
     );
   }
