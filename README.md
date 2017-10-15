@@ -1,9 +1,9 @@
 # Chrometab
-[![Build Status](https://travis-ci.org/patosai/chrometab.svg?branch=dev)](https://travis-ci.org/patosai/chrometab)
+[![Build Status](https://travis-ci.org/patosai/spacetab.svg?branch=dev)](https://travis-ci.org/patosai/spacetab)
 
 A new tab replacement, for the Chrome browser.
 
-![image example](chrometab-ex.jpg)
+![image example](spacetab-ex.jpg)
 
 ### Features
 

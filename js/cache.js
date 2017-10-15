@@ -7,7 +7,7 @@ var Moment = require('moment');
 var CacheObject = require('./cache-object');
 var Util = require('./util');
 
-const CHROME_STORAGE_KEY = 'chrometab';
+const CHROME_STORAGE_KEY = 'spacetab';
 const MAX_AGE_DEFAULT_SECONDS = 400;
 
 var cache = {};
