@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "node build.js",
-    "firefox": "npm run build && npm run firefox-build && npm run firefox-sign",
+    "firefox": "npm run build && npm run firefox-build",
+    "firefox-release": "npm run build && npm run firefox-build-sign",
     "firefox-build": "web-ext build --source-dir=extension --artifacts-dir=build",
-    "firefox-sign": "web-ext sign --api-key=$AMO_JWT_ISSUER --api-secret=$AMO_JWT_SECRET",
+    "firefox-build-sign": "web-ext sign --api-key=$AMO_JWT_ISSUER --api-secret=$AMO_JWT_SECRET --source-dir=extension --artifacts-dir=build",
     "test": "mocha js/*.test.js"
   },
   "repository": {
