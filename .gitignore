@@ -1,3 +1,4 @@
 node_modules/
 extension/css/style.css
 extension/js/bundle.js
+*.xpi

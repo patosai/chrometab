@@ -4,8 +4,9 @@
   "description": "Patosai's Chrome new tab replacement",
   "main": "index.js",
   "scripts": {
-    "test": "mocha js/*.test.js",
-    "build": "node build.js"
+    "build": "node build.js",
+    "firefox": "npm run build && cd extension && zip -r extension.xpi . && mv extension.xpi ..",
+    "test": "mocha js/*.test.js"
   },
   "repository": {
     "type": "git",
