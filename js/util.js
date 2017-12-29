@@ -1,5 +1,3 @@
-var CacheObject = require('./cache-object');
-
 exports.assert = function(assertion, message) {
   if (!assertion) {
     throw new Error(message || "Assertion failed");

@@ -1,5 +1,3 @@
-var Moment = require('moment');
-
 var Util = require('./util');
 
 function CacheObject(metadata, data) {

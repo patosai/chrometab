@@ -1,5 +1,4 @@
 var React = require('react');
-var Moment = require('moment');
 
 var Cache = require('./cache');
 var NewsArticle = require('./news-article');
@@ -72,10 +71,7 @@ var News = React.createClass({
           <img src='svg/refresh.svg'/>
         </button>
         <div className='source'>
-          {this.state.source.name
-            ? (this.state.source.name || this.state.source.id)
-            : 'Loading'
-          }
+          {this.state.source.name || this.state.source.id || 'Loading'}
         </div>
         {this.state.articles.map((article, idx) => {
           return <NewsArticle key={idx}

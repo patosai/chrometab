@@ -2,7 +2,6 @@ var React = require('react');
 var Moment = require('moment');
 
 var Cache = require('./cache');
-var Util = require('./util');
 var secrets = require('./json/secrets.json');
 
 const CACHE_KEY = 'current_weather';

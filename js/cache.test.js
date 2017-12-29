@@ -90,8 +90,7 @@ describe('Cache', () => {
   it('cannot set data max age to non-integers', () => {
     Cache.createCache('foo', 'http://apiurl.com/foo');
     var badVariables = [null, undefined, 'lolcat', "0", () => {}, [], {}];
-    for (var idx in badVariables) {
-      var badVariable = badVariables[idx];
+    for (var badVariables of badVariables) {
       var fxn = () => {
         Cache.setMaxAge('foo', badVariable);
       };
@@ -110,8 +109,7 @@ describe('Cache', () => {
     Cache.createCache('foo', 'http://apiurl.com/foo');
     Cache.setApiUrl('foo', 'http://hello/world');
     var badVariables = [null, undefined, 42, 163.9, () => {}, [], {}];
-    for (var idx in badVariables) {
-      var badVariable = badVariables[idx];
+    for (var badVariables of badVariables) {
       var fxn = () => {
         Cache.setApiUrl('foo', badVariable);
       };
@@ -129,8 +127,7 @@ describe('Cache', () => {
   it('cannot set timestamp to non-integers', () => {
     Cache.createCache('foo', 'http://apiurl.com/foo');
     var badVariables = [null, undefined, 'lolcat', '0', () => {}, [], {}];
-    for (var idx in badVariables) {
-      var badVariable = badVariables[idx];
+    for (var badVariables of badVariables) {
       var fxn = () => {
         Cache.setTimestamp('foo', badVariable);
       };
@@ -243,7 +240,7 @@ describe('Cache', () => {
       'data': 'bar'
     };
 
-    var stub = sinon.stub(Util, 'getJson', (url, callback) => {
+    sinon.stub(Util, 'getJson', (url, callback) => {
       callback(stubData);
     });
 

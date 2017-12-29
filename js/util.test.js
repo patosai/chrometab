@@ -31,8 +31,8 @@ describe('Util', () => {
     var badStuff = [null, undefined, 42, () => {}, {}, [], new CacheObject()];
 
     assert.ok(Util.isString('foo'));
-    for (var idx in badStuff) {
-      assert.notOk(Util.isString(badStuff[idx]));
+    for (var badItem of badStuff) {
+      assert.notOk(Util.isString(badItem));
     }
   });
 
@@ -40,8 +40,8 @@ describe('Util', () => {
     var badStuff = [null, undefined, 'foo', 42, () => {}, []];
 
     assert.ok(Util.isObject({}));
-    for (var idx in badStuff) {
-      assert.notOk(Util.isObject(badStuff[idx]));
+    for (var badItem of badStuff) {
+      assert.notOk(Util.isObject(badItem));
     }
   });
 
@@ -49,8 +49,8 @@ describe('Util', () => {
     var badStuff = [null, undefined, 'foo', 42, [], new CacheObject()];
 
     assert.ok(Util.isFunction(() => {}));
-    for (var idx in badStuff) {
-      assert.notOk(Util.isFunction(badStuff[idx]));
+    for (var badItem of badStuff) {
+      assert.notOk(Util.isFunction(badItem));
     }
   });
 
@@ -60,8 +60,8 @@ describe('Util', () => {
     assert.ok(Util.isInt(42));
     assert.ok(Util.isInt(-1));
     assert.ok(Util.isInt(0));
-    for (var idx in badStuff) {
-      assert.notOk(Util.isInt(badStuff[idx]));
+    for (var badItem of badStuff) {
+      assert.notOk(Util.isInt(badItem));
     }
   });
 
@@ -69,8 +69,8 @@ describe('Util', () => {
     var badStuff = [{}, null, undefined, 'foo', 42, () => {}];
 
     assert.ok(Util.isCacheObject(new CacheObject()));
-    for (var idx in badStuff) {
-      assert.notOk(Util.isCacheObject(badStuff[idx]));
+    for (var badItem of badStuff) {
+      assert.notOk(Util.isCacheObject(badItem));
     }
   });
 });
